@@ -16,6 +16,8 @@ def generate_launch_description():
     robot_description_config = xacro.process_file(xacro_file)
     robot_urdf = robot_description_config.toxml()
 
+    rviz_config_file = os.path.join(share_dir, 'config', 'display.rviz')
+
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -31,7 +33,7 @@ def generate_launch_description():
         name='joint_state_publisher'
     )
 
-    gazebo = IncludeLaunchDescription(
+    gazebo_node = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
                 FindPackageShare('ros_gz_sim'),
@@ -43,6 +45,14 @@ def generate_launch_description():
             'gz_args': '-r empty.sdf',
             'gz_version': '7'
         }.items()
+    )
+
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        arguments=['-d', rviz_config_file],
+        output='screen'
     )
 
     urdf_spawn_node = Node(
@@ -60,17 +70,20 @@ def generate_launch_description():
         executable='parameter_bridge',
         arguments=[
             '/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
-            '/lidar/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked'
+            '/lidar/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
+            '/imu@sensor_msgs/msg/Imu@gz.msgs.IMU'
         ],
         remappings=[('/cmd_vel', '/cmd_vel'),
-                    ('/lidar/points', 'lidar/points')],
+                    ('/lidar/points', 'lidar/points'),
+                    ('/imu', 'imu')],
         output='screen'
     )
 
     return LaunchDescription([
         robot_state_publisher_node,
         joint_state_publisher_node,
-        gazebo,
-        gz_ros_bridge,
         urdf_spawn_node,
+        gazebo_node,
+        gz_ros_bridge,
+        rviz_node
     ])

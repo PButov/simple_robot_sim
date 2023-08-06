@@ -4,6 +4,10 @@
 <xacro:include filename="$(find simple_robot_v2_description)/urdf/materials.xacro" />
 <xacro:include filename="$(find simple_robot_v2_description)/urdf/simple_robot_v2.trans" />
 <xacro:include filename="$(find simple_robot_v2_description)/urdf/simple_robot_v2.gazebo" />
+
+<link name="dummy">
+</link>
+
 <link name="base_link">
   <inertial>
     <origin xyz="-0.03822694000849843 -3.535369667010129e-17 0.05240112920272848" rpy="0 0 0"/>
@@ -15,7 +19,7 @@
     <geometry>
       <mesh filename="file://$(find simple_robot_v2_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="silver"/>
+    <material name="yellow"/>
   </visual>
   <collision>
     <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -36,7 +40,7 @@
     <geometry>
       <mesh filename="file://$(find simple_robot_v2_description)/meshes/left_wheel_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="silver"/>
+    <material name="black"/>
   </visual>
   <collision>
     <origin xyz="0.08 -0.102 -0.05" rpy="0 0 0"/>
@@ -57,7 +61,7 @@
     <geometry>
       <mesh filename="file://$(find simple_robot_v2_description)/meshes/right_wheel_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="silver"/>
+    <material name="black"/>
   </visual>
   <collision>
     <origin xyz="0.08 0.102 -0.05" rpy="0 0 0"/>
@@ -99,7 +103,7 @@
     <geometry>
       <mesh filename="file://$(find simple_robot_v2_description)/meshes/lidar_cap_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="silver"/>
+    <material name="yellow"/>
   </visual>
   <collision>
     <origin xyz="0.08 -0.0 -0.15" rpy="0 0 0"/>
@@ -108,6 +112,11 @@
     </geometry>
   </collision>
 </link>
+
+<joint name="dummy_joint" type="fixed">
+  <parent link="dummy"/>
+  <child link="base_link"/>
+</joint>
 
 <joint name="Revolute 9" type="continuous">
   <origin xyz="-0.08 0.102 0.05" rpy="0 0 0"/>

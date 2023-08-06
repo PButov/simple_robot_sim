@@ -1,9 +1,8 @@
 <?xml version="1.0" ?>
 <robot name="simple_robot_v2" xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-<xacro:property name="body_color" value="Gazebo/Silver" />
-
 <gazebo>
+
   <plugin
     filename="gz-sim-diff-drive-system"
     name="gz::sim::systems::DiffDrive">
@@ -14,48 +13,63 @@
     <odom_publish_frequency>1</odom_publish_frequency>
     <topic>cmd_vel</topic>
   </plugin>
-</gazebo>
 
-<gazebo>
   <plugin
     filename="gz-sim-physics-system"
     name="gz::sim::systems::Physics">
   </plugin>
+
   <plugin
     filename="gz-sim-sensors-system"
     name="gz::sim::systems::Sensors">
     <render_engine>ogre2</render_engine>
   </plugin>
+  
   <plugin
     filename="gz-sim-scene-broadcaster-system"
     name="gz::sim::systems::SceneBroadcaster">
   </plugin>
+
+  <plugin filename="gz-sim-imu-system"
+    name="gz::sim::systems::Imu">
+  </plugin> 
+
 </gazebo>
 
 <gazebo reference="base_link">
-  <material>${body_color}</material>
+  <material name="yellow"/>
   <mu1>0.2</mu1>
   <mu2>0.2</mu2>
   <self_collide>true</self_collide>
   <gravity>true</gravity>
+
+  <sensor name="imu_sensor" type="imu">
+    <pose relative_to='base_link'>0 0 0 0 0 0</pose>
+    <gz_frame_id>base_link</gz_frame_id>
+    <always_on>1</always_on>
+    <update_rate>1</update_rate>
+    <visualize>true</visualize>
+    <topic>imu</topic>
+  </sensor>
+
 </gazebo>
 
 <gazebo reference="left_wheel_1">
-  <material>${body_color}</material>
+  <material name="black"/>
   <mu1>0.2</mu1>
   <mu2>0.2</mu2>
   <self_collide>true</self_collide>
 </gazebo>
 
 <gazebo reference="right_wheel_1">
-  <material>${body_color}</material>
+  <material name="black"/>
   <mu1>0.2</mu1>
   <mu2>0.2</mu2>
   <self_collide>true</self_collide>
 </gazebo>
 
 <gazebo reference="lidar_1">
-  <material>${body_color}</material>
+  <material name="silver"/>
   <mu1>0.2</mu1>
   <mu2>0.2</mu2>
   <self_collide>true</self_collide>
@@ -93,7 +107,7 @@
 </gazebo>
 
 <gazebo reference="lidar_cap_1">
-  <material>${body_color}</material>
+  <material name="yellow"/>
   <mu1>0.2</mu1>
   <mu2>0.2</mu2>
   <self_collide>true</self_collide>
